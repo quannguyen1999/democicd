@@ -1,0 +1,10 @@
+version: 2.17
+jobs:
+  deploy:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      - run:
+          name: Deploy over SSH
+          command: ssh quannguyen1999@192.168.34.178 "ls";
