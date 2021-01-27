@@ -1,6 +1,6 @@
 version: 2.17
 jobs:
-  build:
+#  build:
 #    working_directory: ~/hello-sts
 #    docker:
 #      - image: circleci/node:8.11.1
@@ -26,3 +26,9 @@ jobs:
       - run:
           name: Deploy over SSH
           command: ssh quannguyen1999@192.168.34.178 "ls";
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - deploy:
+          requires:
