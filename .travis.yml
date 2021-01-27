@@ -6,7 +6,19 @@ language: java
 jdk:
 - openjdk8
 
-install: true
+env:
+  - SERVER_IP_ADDRESS=192.168.34.178
 
-script:
-  - mvn clean install
+before_install: # setup the RSA key for use in Dokku Deployment:
+  - openssl aes-256-cbc -K $encrypted_77965d5bdd4d_key -iv $encrypted_77965d5bdd4d_iv
+    -in id_rsa.enc -out ./id_rsa -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 ./id_rsa
+  - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - ssh-add ./id_rsa
+  # test ssh connection for: https://github.com/dwyl/learn-travis/issues/42
+  - ssh -i ./id_rsa root@192.168.34.178 pwd
+
+after_success:
+  - ls
+  # Use BASH instead of DASH! see: https://ubuntuforums.org/showthread.php?t=1932504
